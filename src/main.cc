@@ -1,3 +1,10 @@
+//---------------------------------------------------------------------------------------------------
+// arquivo :    main.cc
+// descricao :  codigo principal para processamento de entradas do tp1 de Algoritmos I
+// autor :  augusto guerra de lima augustoguerra@dcc.ufmg.br
+// historico :  20241102 arquivo criado
+//---------------------------------------------------------------------------------------------------
+
 #include<bits/stdc++.h>
 #include"../include/graph.h"
 using namespace std;
@@ -15,7 +22,11 @@ int main()
         G.add_edge(u,v);
     }
 
-    G.print();
+    // G.print();
+
+    G.determine_capital();
+
+    cout<<G.capital<<"\n";
 
     return(0);
 }
