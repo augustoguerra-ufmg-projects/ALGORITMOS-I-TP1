@@ -104,27 +104,98 @@ void graph_c::determine_capital()
     }
 }
 
+// funcao   : transpose
+// descricao    : computa o grafo transposto do grafo G
+// dominio  : grafo G
+// imagem : grafo transposto Gt
 graph_c* graph_c::transpose()
 {
-    
+    graph_c* Gt=new graph_c(this->V);
+    for(unordered_map<string,list<string>>::iterator i=this->adj.begin(); i!=this->adj.end();i++)
+    {
+        string u=i->first;
+        for(list<string>::iterator v=i->second.begin();v!=i->second.end();v++)
+        {
+            Gt->add_edge(*v,u);
+        }
+    }
+    return(Gt);
 }
 
+// metodo   : dfs
+// descricao : metodo utilizado no algoritmo de kosaraju para fazer uma visita na profundidade do grafo empilhando vertices
+// que sao encerrados para a chamadas do kosaraju durante a segunda dfs que determina de fato as componentes conexas do grafo direcionado
 void graph_c::dfs(string&s, unordered_map<string,bool>&visit, stack<string>&S)
 {
     visit[s]=1;
+
     for(list<string>::iterator u=adj[s].begin(); u!=adj[s].end(); u++)
         if(!visit[*u])
-            dfs(s,visit,S);
+            dfs(*u,visit,S);
 
     S.push(s);
 }
 
-void graph_c::dfs_SCC()
+// metodo   : dfs_SCC
+// descricao    : metodo utilizado no algoritmo de kosaraju para
+// determinar as componentes fortemente conexas a partir do grafo transposto
+// atribui coloracao (um numero inteiro) para os vertices de uma componente
+void graph_c::dfs_SCC(string&s, unordered_map<string,bool>&visit, int color, graph_c* G, int& cardinality)
 {
- 
+    cardinality++;
+    visit[s]=1;
+    G->colors[s]=color;
+
+    for(list<string>::iterator u=this->adj[s].begin(); u!=this->adj[s].end(); u++)
+        if(!visit[*u])
+            dfs_SCC(*u,visit,color,G,cardinality);
 }
 
+// metodo   : determine_battalions
+// descricao :  implementa o algoritmo de kosaraju para determiniar
+// componentes conexas do grafo
 void graph_c::determine_battalions()
 {
+    stack<string>S;
+    unordered_map<string,bool>visit;
+    graph_c* Gt=transpose();
 
+    dfs(this->capital, visit, S);
+
+    visit.clear();
+    
+    int color=0;
+    while(!S.empty())
+    {
+        string u=S.top();
+        S.pop();
+
+        if(!visit[u])
+        {
+            int cardinality=0;
+            Gt->dfs_SCC(u,visit,color,this,cardinality);
+            this->battalions.push_back(make_pair(u,cardinality));
+            
+            if(cardinality>1)
+                this->patrols++;
+
+            color++;
+        }
+    }
+
+    delete(Gt);
+}
+
+// metodo   : list_battalions
+// descricao    : conta quantos batolhoes existem e os lista com excecao da capital
+void graph_c::list_battalions()
+{
+    cout<<this->battalions.size()-1<<endl;
+    for(size_t i=1; i<battalions.size(); i++)
+        cout<<this->battalions[i].first<<endl;
+}
+
+void graph_c::determine_patrols()
+{
+    cout<<this->patrols<<endl;
 }

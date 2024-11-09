@@ -25,8 +25,12 @@ int main()
     // G.print();
 
     G.determine_capital();
-
     cout<<G.capital<<"\n";
+
+    G.determine_battalions();
+    G.list_battalions();
+    
+    G.determine_patrols();
 
     return(0);
 }

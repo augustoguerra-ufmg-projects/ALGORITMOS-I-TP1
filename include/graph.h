@@ -21,24 +21,28 @@ class graph_c
         
         string capital;
         vector<pair<string,int>>battalions;
+        int patrols;
         
-        unordered_map<string,int>colors;
+        unordered_map<string,int>colors; // cor de cada vertice SCC
         
-        unordered_map<string,list<string>>adj;
+        unordered_map<string,list<string>>adj; // lista de adjacencia do grafo
     
-        graph_c(int _V):V(_V),E(0){}
+        graph_c(int _V):V(_V),E(0), patrols(0){}
         ~graph_c(){}
 
         void add_edge(string& u, string& v);
         void print();
-
+    
         void determine_capital();
         void determine_battalions();
+        void determine_patrols();
+
+        void list_battalions();
 
     private:
         int bfs(string s);
-        void dfs(string&s, unordered_map<string,bool>visit, stack<string>&S);
-        void dfs_SCC();
+        void dfs(string&s, unordered_map<string,bool>&visit, stack<string>&S);
+        void dfs_SCC(string&s, unordered_map<string,bool>&visit, int color, graph_c* G,int& cardinality);
         graph_c* transpose();
 };
 
