@@ -103,3 +103,28 @@ void graph_c::determine_capital()
         }
     }
 }
+
+graph_c* graph_c::transpose()
+{
+    
+}
+
+void graph_c::dfs(string&s, unordered_map<string,bool>&visit, stack<string>&S)
+{
+    visit[s]=1;
+    for(list<string>::iterator u=adj[s].begin(); u!=adj[s].end(); u++)
+        if(!visit[*u])
+            dfs(s,visit,S);
+
+    S.push(s);
+}
+
+void graph_c::dfs_SCC()
+{
+ 
+}
+
+void graph_c::determine_battalions()
+{
+
+}

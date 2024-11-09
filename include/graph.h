@@ -18,9 +18,14 @@ class graph_c
 {
     public:
         int V,E;
+        
         string capital;
+        vector<pair<string,int>>battalions;
+        
+        unordered_map<string,int>colors;
+        
         unordered_map<string,list<string>>adj;
-
+    
         graph_c(int _V):V(_V),E(0){}
         ~graph_c(){}
 
@@ -28,9 +33,13 @@ class graph_c
         void print();
 
         void determine_capital();
-    
+        void determine_battalions();
+
     private:
         int bfs(string s);
+        void dfs(string&s, unordered_map<string,bool>visit, stack<string>&S);
+        void dfs_SCC();
+        graph_c* transpose();
 };
 
 #endif
