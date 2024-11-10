@@ -29,8 +29,6 @@ int main()
 
     G.determine_battalions();
     G.list_battalions();
-    
-    G.determine_patrols();
 
     return(0);
 }
