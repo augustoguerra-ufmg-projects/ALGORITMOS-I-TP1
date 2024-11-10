@@ -37,6 +37,7 @@ class graph_c
     
         void determine_capital();
         void determine_battalions();
+        void determine_patrols();
 
         void list_battalions();
 
@@ -48,6 +49,8 @@ class graph_c
         void kosaraju_SCC();
         int bfs_criteria(string&s);
         graph_c* transpose();
+
+        void path_patrol(string&s);
 };
 
 #endif
