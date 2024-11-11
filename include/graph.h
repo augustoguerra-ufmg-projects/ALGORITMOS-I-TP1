@@ -1,56 +1,48 @@
-//---------------------------------------------------------------------------------------------------
-// arquivo :    graph.h
-// descricao :  cabecalho para grafo direcionado do tp1 de Algoritmos I
-// autor :  augusto guerra de lima augustoguerra@dcc.ufmg.br
-// historico :  20241102 arquivo criado
-//---------------------------------------------------------------------------------------------------
-
 #ifndef GRAPH_H
 #define GRAPH_H
 
 #include<bits/stdc++.h>
 using namespace std;
 
-// classe   : graph_c
-// descricao :  modela o problema das cidades utilizando um grafo direcionado
-// a escolha de um unordered_map se deve ao fato de os vertices nao serem numericamente indexados
+const int INF=0x3f3f3f3f;
+
 class graph_c
 {
     public:
         int V,E;
         
-        string capital;
-        vector<pair<string,int>>battalions;
+        int capital;
+        vector<pair<int,int>>battalions;
         int patrols;
-        
-        unordered_map<string,int>colors; // cor de cada vertice SCC
-        unordered_map<string,int>capital_distances; // distancia da capital para cada vertice
-        unordered_map<int,list<string>>SCC_components; // lista de componentes conexas de cada grafo
-        
-        unordered_map<string,list<string>>adj; // lista de adjacencia do grafo
-    
-        graph_c(int _V):V(_V),E(0), patrols(0){}
+
+        vector<int>capital_distances; // distancia da capital para cada vertice
+        vector<int>colors; // cor de cada vertice SCC
+        vector<vector<int>>SCC_components; // lista de componentes fortemente conexas do grafo
+
+        unordered_map<string,int>toInt;
+        unordered_map<int,string>toString;
+
+        vector<vector<pair<int,int>>>adj;
+
+        graph_c(int _V);
         ~graph_c(){}
 
-        void add_edge(string& u, string& v);
+        void add_edge(string&u,string&v);
         void print();
-    
+
         void determine_capital();
         void determine_battalions();
-        void determine_patrols();
 
         void list_battalions();
 
     private:
-        int bfs(string s, unordered_map<string,int>&distances);
+        int bfs(int i, vector<int>&distances);
         
-        void dfs(string&s, unordered_map<string,bool>&visit, stack<string>&S);
-        void dfs_SCC(string&s, unordered_map<string,bool>&visit, int color, graph_c* G);
+        void dfs(int s,vector<bool>&visit, stack<int>&S);
+        void dfs_SCC(int s, vector<bool>&visit, int color, graph_c* G);
         void kosaraju_SCC();
-        int bfs_criteria(string&s);
+        int bfs_criteria(int s);
         graph_c* transpose();
-
-        void path_patrol(string&s);
 };
 
 #endif

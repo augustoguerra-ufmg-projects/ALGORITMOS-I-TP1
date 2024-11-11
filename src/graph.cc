@@ -1,35 +1,60 @@
-//---------------------------------------------------------------------------------------------------
-// arquivo :    graph.cc
-// descricao :  implementacao de funcoes e metodos do grafo direcionado para o tp1 de Algoritmos I
-// autor :  augusto guerra de lima augustoguerra@dcc.ufmg.br
-// historico :  20241102 arquivo criado
-//---------------------------------------------------------------------------------------------------
-
 #include<bits/stdc++.h>
 #include"../include/graph.h"
 using namespace std;
 
-// metodo : add_edge
-// descricao :  adiciona uma aresta direcionada de u para v no grafo direcionado
-void graph_c::add_edge(string& u, string& v)
+graph_c::graph_c(int _V):V(_V),E(0),patrols(0)
 {
-    if(this->adj.find(v)==this->adj.end())
-        this->adj[v]=list<string>();
-
-    this->adj[u].push_back(v);
-    this->E++;
+    adj.resize(V);
+    capital_distances.resize(V);
+    colors.resize(V);
 }
 
-// metodo : print
-// descricao : imprime as listas de adjacencia para cada vertice do grafo direcionado
+void graph_c::add_edge(string&u,string&v)
+{
+    if(toInt.find(u)==toInt.end())
+    {
+        int id=static_cast<int>(toInt.size());
+        toInt[u]=id;
+        toString[id]=u;
+    }
+    if(toInt.find(v)==toInt.end())
+    {
+        int id=static_cast<int>(toInt.size());
+        toInt[v]=id;
+        toString[id]=v;
+    }
+    int u_id=toInt[u];
+    int v_id=toInt[v];
+    adj[u_id].emplace_back(v_id,E);
+    E++;
+}
+
+graph_c* graph_c::transpose()
+{
+    graph_c* Gt=new graph_c(V);
+
+    for(int u=0;u<V;u++)
+        for(auto& edge:adj[u])
+            {
+                Gt->adj[edge.first].emplace_back(u,edge.second);
+            }
+    Gt->toInt=toInt;
+    Gt->toString=toString;
+    Gt->V=V;
+    Gt->E=E;
+
+    return(Gt);
+}
+
 void graph_c::print()
 {
-    for(unordered_map<string,list<string>>::iterator i=this->adj.begin();i!=this->adj.end();i++)
+    for(int u=0;u<V;u++)
     {
-        cout<<i->first<<": ";
-        for(list<string>::iterator j=i->second.begin();j != i->second.end();j++)
-            cout<<*j<<"\t";
-            
-        cout<<"\n";
+        cout<<u<<" "<<toString[u]<<":";
+        for(auto edge : adj[u])
+        {
+            cout << "(" <<edge.first<<" "<<toString[edge.first] << ", " << edge.second << ") ";
+        }
+        cout<<endl;
     }
 }

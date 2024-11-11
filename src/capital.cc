@@ -2,22 +2,10 @@
 #include"../include/graph.h"
 using namespace std;
 
-// funcao : bfs
-// descricao :  atraves de uma busca em largura no grafo direcionado a partir de um vertice fonte s computa a 
-// excentricidade do vertice s i.e. a soma de todas as distancias a todos os vertices
-// esse metodo e essencial para determinar qual cidade e a capital
-// dominio :    string s rotulo de um vertice encapsulado na classe graph_c
-// imagem   : excentricidade do vertice
-int graph_c::bfs(string s, unordered_map<string,int>&distances)
+int graph_c::bfs(int s, vector<int>&distances)
 {
-    unordered_map<string,bool>visit;
-    queue<string>q;
-
-    for(unordered_map<string,list<string>>::iterator i=adj.begin(); i!=adj.end(); i++)
-    {
-        distances[i->first]=INF;
-        visit[i->first]=0;
-    }
+    vector<bool>visit(V,0);
+    queue<int>q;
 
     distances[s]=0;
     visit[s]=1;
@@ -25,48 +13,45 @@ int graph_c::bfs(string s, unordered_map<string,int>&distances)
 
     while(!q.empty())
     {
-        string st=q.front();
+        int u=q.front();
         q.pop();
 
-        for(string& e : this->adj[st])
+        for(auto edge : adj[u])
         {
-            if(!visit[e])
+            if(!visit[edge.first])
             {
-                visit[e]=1;
-                distances[e]=distances[st]+1;
-                q.push(e);
+                visit[edge.first]=1;
+                distances[edge.first]=distances[u]+1;
+                q.push(edge.first);
             }
         }
     }
 
     int sum=0;
-    for(unordered_map<string,int>::iterator i=distances.begin();i!=distances.end();i++)
+    for(int u=0;u<V;u++)
     {
-        if(i->second==INF)
+        if(distances[u]==INF)
             return(INF);
 
-        sum+=i->second;
+        sum+=distances[u];
     }
-
     return(sum);
 }
 
-// metodo   : determine_capital
-// descricao    : atraves de multiplas bucas em largura determina qual vertice sera definido como capital
 void graph_c::determine_capital()
 {
     int mindist=INF;
-
-    for(unordered_map<string,list<string>>::iterator i=this->adj.begin(); i!=this->adj.end(); i++)
+    
+    for(int u=0;u<V;u++)
     {
-        unordered_map<string,int>distances;
-        int dist = this->bfs(i->first,distances);
-        
+        vector<int>distances(V,INF);
+        int dist=bfs(u,distances);
+
         if(dist<mindist)
         {
             mindist=dist;
-            this->capital = i->first;
-            this->capital_distances = distances;
+            capital=u;
+            capital_distances=distances;
         }
     }
 }
