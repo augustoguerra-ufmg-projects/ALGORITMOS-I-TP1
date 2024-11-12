@@ -2,52 +2,67 @@
 #include"../include/graph.h"
 using namespace std;
 
-// metodo   : path_patrol
-// descricao    : descreve um circuito nas arestas de uma
-// componente conexa
-void graph_c::path_patrol(string&s)
+void graph_c::bfs_parentage(int s, vector<pair<int,int>>&P)
 {
-    vector<string>patrol_path;
-    unordered_map<string,bool>visit;
+    vector<bool>visit(V,0);
+    queue<int>q;
 
-    stack<string>S;
-    S.push(s);
+    q.push(s);
+    visit[s]=1;
+    P[s]={-1,-1};
 
-    while(!S.empty())
+    while(!q.empty())
     {
-        string u=S.top();
-        S.pop();
-        patrol_path.push_back(u);
-
-        for(string&v:this->adj[u])
+        int u=q.front();
+        q.pop();
+        for(const auto&edge:adj[u])
         {
-            string edge=u+","+v;
-
-            if(colors[v]==colors[u] and !visit[edge])
+            int v=edge.first;
+            int edge_id=edge.second;
+            if(colors[v]==colors[s] and !visit[v])
             {
-                visit[edge]=1;
-                S.push(v);
+                visit[v]=1;
+                P[v]=make_pair(u,edge_id);
+                // cout<<toString[u]<<"->"<<toString[v]<<" "<<edge_id<<endl;
+                q.push(v);
             }
         }
     }
-    
-    for(size_t i=0; i<patrol_path.size()-1;i++)
-    {
-        cout<<patrol_path[i]<<" ";
-    }
-    cout<<endl;
 }
 
-// metodo   : determine_patrols
-// descricao    : determina para as componentes fortemente conexas seus
-// possiveis patrulhamentos
+void graph_c::path_patrol(int s)
+{
+    vector<pair<int,int>>parents(V); // pai e aresta
+    vector<pair<int,int>>childs(V); // filho e aresta
+    vector<int>edges; // arestas a serem visitadas
+    vector<bool>visit(E,0); // marca se uma aresta ja foi ou nao visitada
+    
+    graph_c* Gt=transpose(); // grafo transposto
+
+    for(int u : SCC_components[colors[s]]) // para a componente conexa lista todas suas arestas e adiciona em um vetor para visita-las
+        for(const auto&edge:adj[u])
+            if(colors[edge.first]==colors[s])
+                edges.push_back(edge.second);
+
+    // cout<<" Pais "<<endl;
+    bfs_parentage(s,parents); // determina pais e indices de arestas para os vertices
+    
+    // cout<<" Filhos "<<endl;
+    Gt->bfs_parentage(s,childs);
+
+    // agora a logica de fazer o patrulhamento
+    int current_vertex=s; // comeca no batalhao
+    while(!edges.empty())
+    {
+        edge=edges.back();
+        edges.pop_back();
+    }
+}
+
 void graph_c::determine_patrols()
 {
-    cout<<this->patrols<<endl;
+    cout<<patrols<<endl;
     for(size_t i=0; i<battalions.size(); i++)
-        if(this->battalions[i].second>1)
-        {
-            string battalion=this->battalions[i].first;
-            path_patrol(battalion);
-        }
+        if(battalions[i].second>1)
+            path_patrol(battalions[i].first);
 }

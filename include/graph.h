@@ -23,6 +23,7 @@ class graph_c
         unordered_map<int,string>toString;
 
         vector<vector<pair<int,int>>>adj;
+        vector<pair<int,int>>edges_list; // indice da aresta para o par de vertices que as liga
 
         graph_c(int _V);
         ~graph_c(){}
@@ -34,6 +35,7 @@ class graph_c
         void determine_battalions();
 
         void list_battalions();
+        void determine_patrols();
 
     private:
         int bfs(int i, vector<int>&distances);
@@ -43,6 +45,9 @@ class graph_c
         void kosaraju_SCC();
         int bfs_criteria(int s);
         graph_c* transpose();
+
+        void bfs_parentage(int s, vector<pair<int,int>>&P);
+        void path_patrol(int s);
 };
 
 #endif
