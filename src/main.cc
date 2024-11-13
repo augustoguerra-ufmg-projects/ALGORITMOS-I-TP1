@@ -15,7 +15,7 @@ int main()
         G.add_edge(u,v);
     }
 
-    // G.print();
+    //G.print();
 
     G.determine_capital();
     cout<<G.toString[G.capital]<<endl;

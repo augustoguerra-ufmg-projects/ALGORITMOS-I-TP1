@@ -22,8 +22,9 @@ void graph_c::bfs_parentage(int s, vector<pair<int,int>>&P)
             if(colors[v]==colors[s] and !visit[v])
             {
                 visit[v]=1;
-                P[v]=make_pair(u,edge_id);
-                // cout<<toString[u]<<"->"<<toString[v]<<" "<<edge_id<<endl;
+
+                P[v] = {u,edge_id};
+
                 q.push(v);
             }
         }
@@ -32,31 +33,63 @@ void graph_c::bfs_parentage(int s, vector<pair<int,int>>&P)
 
 void graph_c::path_patrol(int s)
 {
-    vector<pair<int,int>>parents(V); // pai e aresta
-    vector<pair<int,int>>childs(V); // filho e aresta
-    vector<int>edges; // arestas a serem visitadas
-    vector<bool>visit(E,0); // marca se uma aresta ja foi ou nao visitada
+    vector<pair<int,int>>from_battalion(V);
+    vector<pair<int,int>>to_battalion(V);
+    vector<int>patrol;
+    vector<int>edges;
+    vector<bool>visit(E,0);
     
-    graph_c* Gt=transpose(); // grafo transposto
+    graph_c* Gt=transpose();
 
-    for(int u : SCC_components[colors[s]]) // para a componente conexa lista todas suas arestas e adiciona em um vetor para visita-las
+    
+    for(int u : SCC_components[colors[s]])
         for(const auto&edge:adj[u])
             if(colors[edge.first]==colors[s])
                 edges.push_back(edge.second);
 
-    // cout<<" Pais "<<endl;
-    bfs_parentage(s,parents); // determina pais e indices de arestas para os vertices
-    
-    // cout<<" Filhos "<<endl;
-    Gt->bfs_parentage(s,childs);
+    bfs_parentage(s,from_battalion);
+    Gt->bfs_parentage(s,to_battalion);
 
-    // agora a logica de fazer o patrulhamento
-    int current_vertex=s; // comeca no batalhao
-    while(!edges.empty())
+    for(int i:edges)
     {
-        edge=edges.back();
-        edges.pop_back();
+        if(visit[i])continue;
+
+        int u=edges_list[i].first;
+        int v=edges_list[i].second;
+
+        int w=u;
+        vector<int>path;
+        while(w!=s)
+        {
+            w=from_battalion[w].first;
+            int e = from_battalion[w].second;
+            if(e!=-1)visit[e]=1;
+            path.push_back(w);
+        }
+        reverse(path.begin(),path.end());
+        path.push_back(u);
+        path.push_back(v);
+        visit[i]=1;
+
+        w=v;
+        while(w!=s)
+        {
+            int e=to_battalion[w].second;
+            w=to_battalion[w].first;
+            if(e!=-1)visit[e]=1;
+            path.push_back(w);
+        }
+        for(int j:path)
+            patrol.push_back(j);
     }
+
+    for(int i=0;i<((int)patrol.size())-1;i++)
+    {
+        if(i>0 and patrol[i]==patrol[i-1])continue;
+
+        cout<<toString[patrol[i]]<<" ";
+    }
+    cout<<endl;
 }
 
 void graph_c::determine_patrols()
