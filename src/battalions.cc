@@ -1,7 +1,16 @@
+//=================================================================
+// arquivo  : battalions.cc
+// descricao    : implementacao do algoritmos para determinar batalhoes
+// autor    : Augusto Guerra de Lima augustoguerra@dcc.ufmg.br
+// historico    : ultima atualizacao 20241113
+//=================================================================
+
 #include<bits/stdc++.h>
 #include"../include/graph.h"
 using namespace std;
 
+// metodo   : dfs
+// descricao    : primeira dfs do algoritmo de Kosaraju
 void graph_c::dfs(int s,vector<bool>&visit, stack<int>&S)
 {
     visit[s]=1;
@@ -12,6 +21,8 @@ void graph_c::dfs(int s,vector<bool>&visit, stack<int>&S)
     S.push(s);
 }
 
+// metodo   : dfs_SCC
+// descricao    : segunda dfs do algoritmo de Kosaraju determina as SCCs
 void graph_c::dfs_SCC(int s,vector<bool>&visit, int color, graph_c* G)
 {
     visit[s]=1;
@@ -23,6 +34,8 @@ void graph_c::dfs_SCC(int s,vector<bool>&visit, int color, graph_c* G)
             dfs_SCC(edge.first, visit, color, G);
 }
 
+// metodo   : kosaraju_SCC
+// descricao    : divide o grafo direcionado em componentes fortemente conexas a partir de coloracao
 void graph_c::kosaraju_SCC()
 {
     stack<int>S;
@@ -50,6 +63,10 @@ void graph_c::kosaraju_SCC()
     delete(Gt);
 }
 
+// funcao   : bfs_criteria
+// descricao    : desempata vertices que empataram no primeiro criterio de distancia da capital pela excentricidade
+// dominio  : vertice de uma SCC
+// imagem   : excentricidade do vertice
 int graph_c::bfs_criteria(int s)
 {
     vector<int>distances(V,INF);
@@ -85,6 +102,8 @@ int graph_c::bfs_criteria(int s)
     return(sum);
 }
 
+// metodo   : determine_battalions
+// descricao    : apos o particionamento em SCCs determina para cada uma um vertice batalhao secundario
 void graph_c::determine_battalions()
 {
     kosaraju_SCC();
@@ -138,6 +157,8 @@ void graph_c::determine_battalions()
     }
 }
 
+// metodo   : list_battalions
+// descricao    : simplesmente enumera os batalhoes secundarios do grafo direcionado
 void graph_c::list_battalions()
 {
     cout<<battalions.size()-1<<endl;

@@ -1,7 +1,18 @@
+//=================================================================
+// arquivo  : capital.cc
+// descricao    : implementacao do algoritmo para determinar capital
+// autor    : Augusto Guerra de Lima augustoguerra@dcc.ufmg.br
+// historico    : ultima atualizacao 20241113
+//=================================================================
+
 #include<bits/stdc++.h>
 #include"../include/graph.h"
 using namespace std;
 
+// funcao   : bfs
+// descricao    : avalia a partir de uma bfs a excentricidade de um vertice
+// dominio  : grafo direcionado e um vertice fonte
+// imagem   : excentricidade do vertice fonte
 int graph_c::bfs(int s, vector<int>&distances)
 {
     vector<bool>visit(V,0);
@@ -38,6 +49,8 @@ int graph_c::bfs(int s, vector<int>&distances)
     return(sum);
 }
 
+// metodo   : determine_capital
+// descricao    : determina a capital do grafo direcionado pelo criterio de excentricidade
 void graph_c::determine_capital()
 {
     int mindist=INF;

@@ -1,3 +1,10 @@
+//=================================================================
+// arquivo  : main.cc
+// descricao    : chamada das funcoes do trabalho pratico
+// autor    : Augusto Guerra de Lima augustoguerra@dcc.ufmg.br
+// historico    : ultima atualizacao 20241113
+//=================================================================
+
 #include<bits/stdc++.h>
 #include"../include/graph.h"
 using namespace std;

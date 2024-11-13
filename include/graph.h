@@ -1,3 +1,10 @@
+//=================================================================
+// arquivo  : graph.h
+// descricao    : cabecalho da estrutura de grafo direcionado
+// autor    : Augusto Guerra de Lima augustoguerra@dcc.ufmg.br
+// historico    : ultima atualizacao 20241113
+//=================================================================
+
 #ifndef GRAPH_H
 #define GRAPH_H
 
@@ -6,6 +13,10 @@ using namespace std;
 
 const int INF=0x3f3f3f3f;
 
+// classe   : graph_c
+// descricao    : armazena a lista de adjacencia bem como informacoes relevantes para o grafo direcionado
+// o trabalho foi todo feito utilizando numeros inteiros com um mapeamento de inteiros para o nome dos 
+// centros urbanos (strings)
 class graph_c
 {
     public:
@@ -15,15 +26,15 @@ class graph_c
         vector<pair<int,int>>battalions;
         int patrols;
 
-        vector<int>capital_distances; // distancia da capital para cada vertice
-        vector<int>colors; // cor de cada vertice SCC
-        vector<vector<int>>SCC_components; // lista de componentes fortemente conexas do grafo
+        vector<int>capital_distances; // distancias da capital ate cada vertice
+        vector<int>colors;            // colorir e separar  as SCCs do grafo direcionado
+        vector<vector<int>>SCC_components;
 
         unordered_map<string,int>toInt;
         unordered_map<int,string>toString;
 
         vector<vector<pair<int,int>>>adj;
-        vector<pair<int,int>>edges_list; // indice da aresta para o par de vertices que as liga
+        vector<pair<int,int>>edges_list; // para cada aresta determina seus vertices (u,v)
 
         graph_c(int _V);
         ~graph_c(){}

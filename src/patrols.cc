@@ -1,7 +1,16 @@
+//=================================================================
+// arquivo  : patrols.cc
+// descricao    : implementacao do algoritmo de patrulhamentos
+// autor    : Augusto Guerra de Lima augustoguerra@dcc.ufmg.br
+// historico    : ultima atualizacao 20241113
+//=================================================================
+
 #include<bits/stdc++.h>
 #include"../include/graph.h"
 using namespace std;
 
+// metodo   : bfs_parentage
+// descricao    : determina relacao pai e filho entre os vertices das SCCs e quais arestas sao utilizadas
 void graph_c::bfs_parentage(int s, vector<pair<int,int>>&P)
 {
     vector<bool>visit(V,0);
@@ -31,6 +40,8 @@ void graph_c::bfs_parentage(int s, vector<pair<int,int>>&P)
     }
 }
 
+// metodo   : path_patrol
+// descricao    : para uma SCC a partir de um batalhao descreve um circuito visitando todas as aretas da SCC
 void graph_c::path_patrol(int s)
 {
     vector<pair<int,int>>from_battalion(V);
@@ -92,6 +103,9 @@ void graph_c::path_patrol(int s)
     cout<<endl;
 }
 
+
+// metodo   : determine_patrols
+// descricao    : simplesmente faz a chamada de path_patrol para os batalhoes onde se aplica
 void graph_c::determine_patrols()
 {
     cout<<patrols<<endl;

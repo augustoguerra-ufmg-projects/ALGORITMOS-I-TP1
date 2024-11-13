@@ -1,7 +1,15 @@
+//=================================================================
+// arquivo  : graph.cc
+// descricao    : implementacao dos metodos do grafo
+// autor    : Augusto Guerra de Lima augustoguerra@dcc.ufmg.br
+// historico    : ultima atualizacao 20241113
+//=================================================================
+
 #include<bits/stdc++.h>
 #include"../include/graph.h"
 using namespace std;
 
+// construtor
 graph_c::graph_c(int _V):V(_V),E(0),patrols(0)
 {
     adj.resize(V);
@@ -9,6 +17,9 @@ graph_c::graph_c(int _V):V(_V),E(0),patrols(0)
     colors.resize(V);
 }
 
+// metodo   : add_edge
+// descricao    : simplesmente processa as strings e mapeia para inteiros
+// adcionando uma aresta no grafo
 void graph_c::add_edge(string&u,string&v)
 {
     if(toInt.find(u)==toInt.end())
@@ -30,6 +41,10 @@ void graph_c::add_edge(string&u,string&v)
     E++;
 }
 
+// funcao   : transpose
+// descricao    : retorna um grafo transposto preservando todos os indices e mapeamento do grafo original
+// dominio  : grafo direcionado
+// imagem   : grafo direcionado transposto
 graph_c* graph_c::transpose()
 {
     graph_c* Gt=new graph_c(V);
@@ -51,6 +66,8 @@ graph_c* graph_c::transpose()
     return(Gt);
 }
 
+// metodo   : print
+// descricao    : imprime o grafo de forma visual apenas para fins de debbuging
 void graph_c::print()
 {
     for(int u=0;u<V;u++)
